@@ -17,6 +17,7 @@ class Spree::AdvancedReport::GeoReport::GeoRevenue < Spree::AdvancedReport::GeoR
     data = { :state => {}, :country => {} }
     orders.each do |order|
       revenue = revenue(order)
+      next unless order.bill_address
       if order.bill_address.state
         data[:state][order.bill_address.state_id] ||= {
           :name => order.bill_address.state.name,
