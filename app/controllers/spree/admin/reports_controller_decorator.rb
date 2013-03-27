@@ -1,19 +1,23 @@
-Spree::Admin::ReportsController.class_eval do
-  before_filter :add_own 
-  before_filter :basic_report_setup, :actions => [:profit, :revenue, :units, :top_products, :top_customers, :geo_revenue, :geo_units, :count]
+require_dependency 'spree/admin/reports_controller'
 
-  def add_own
-    return if Spree::Admin::ReportsController::AVAILABLE_REPORTS.has_key?(:geo_profit)
-    Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(ADVANCED_REPORTS)
-  end
-  I18n.locale = Rails.application.config.i18n.default_locale
+Spree::Admin::ReportsController.class_eval do
+  # until https://github.com/spree/spree/issues/1863 is taken care of
+  # this is a workaround hack to get the report definitions to load
+
+  I18n.load_path << Spree::AdvancedReporting::Engine.config.paths["config/locales"].first
+  I18n.locale = Spree::Config[:default_locale]
   I18n.reload!
 
+  # TODO there has got to be a more ruby way to do this...
   ADVANCED_REPORTS ||= {}
-  [ :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit].each do |x|
-    ADVANCED_REPORTS[x]= {name: I18n.t("adv_report."+x.to_s), :description => I18n.t("adv_report."+x.to_s)}
+  [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
+    # TODO we should pull the name + description for the report models themselves rather than redefining them as I18n definitions
+    ADVANCED_REPORTS[x]= {name: I18n.t("adv_report.#{x}"), :description => I18n.t("adv_report.#{x}")}
   end
 
+  Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(ADVANCED_REPORTS)
+
+  before_filter :basic_report_setup, :actions => ADVANCED_REPORTS.keys
    
   def basic_report_setup
     @reports = ADVANCED_REPORTS
@@ -30,25 +34,21 @@ Spree::Admin::ReportsController.class_eval do
     params[:advanced_reporting]["report_type"] ||= :state
     respond_to do |format|
       format.html { render :template => "spree/admin/reports/geo_base" }
-      format.csv do
-        send_data @report.ruportdata[params[:advanced_reporting]['report_type']].to_csv
-      end
+      format.csv { send_data @report.ruportdata[params[:advanced_reporting]['report_type']].to_csv }
     end
   end
 
   def base_report_top_render(filename)
     respond_to do |format|
       format.html { render :template => "spree/admin/reports/top_base" }
-      format.csv do
-        send_data @report.ruportdata.to_csv
-      end
+      format.csv { send_data view_context.strip_tags(@report.ruportdata.to_csv) }
     end
   end
 
   def base_report_render(filename)
     params[:advanced_reporting] ||= {}
     params[:advanced_reporting]["report_type"] = params[:advanced_reporting]["report_type"].to_sym if params[:advanced_reporting]["report_type"]
-    params[:advanced_reporting]["report_type"] ||= :daily
+    params[:advanced_reporting]["report_type"] ||= I18n.t("adv_report.daily").downcase.to_sym
     respond_to do |format|
       format.html { render :template => "spree/admin/reports/increment_base" }
       format.csv do
@@ -59,6 +59,11 @@ Spree::Admin::ReportsController.class_eval do
         end
       end
     end
+  end
+  
+  def outstanding
+    @orders = Spree::Order.complete.where("state != 'canceled'").select{ |o| o.outstanding_balance? }
+    @outstanding_balance = @orders.inject(0){ |outstanding, o| outstanding += o.outstanding_balance }
   end
 
   def revenue
@@ -104,5 +109,10 @@ Spree::Admin::ReportsController.class_eval do
   def geo_profit
     @report = Spree::AdvancedReport::GeoReport::GeoProfit.new(params)
     geo_report_render("geo_profit")
+  end
+
+  def transactions
+    @report = Spree::AdvancedReport::TransactionReport.new(params)
+    base_report_top_render("transactions")
   end
 end

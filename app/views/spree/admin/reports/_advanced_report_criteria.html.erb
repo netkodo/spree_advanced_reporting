@@ -1,10 +1,35 @@
+<% content_for :head do -%>
+  <%= stylesheet_link_tag 'admin/advanced_reporting/advanced_reporting' %>
+<% end -%>
+
 <div id="advanced_report_search">
+  <h3><%=t "adv_report.advanced_reports"%></h3>
+  <%= select(nil, nil, @reports.map { |k, v| [v[:name], send("#{k}_admin_reports_url".to_sym)] }, {selected: request.url }, {name: 'report', id: 'report' }) %>
+
   <%= form_for :search do |s| %>
     <% if @stores -%>
-        Store:<br /><%= collection_select(:search, :store_id, @stores, :id, :name, { :include_blank => 'All' } ) %><br />
-        <br>
-
+        Store:<br /><%= collection_select(:search, :store_id, @stores, :id, :name, { :include_blank => 'All' } ) %><br /><br/>
     <% end -%>
+
+    <div id="order_type">
+      Filter by When Order Was:<br/>
+      <%= select(:advanced_reporting, :order_type, [:completed, :shipped], include_blank: t(:report_default), selected: params[:advanced_reporting][:order_type]) %>
+    </div>
+
+    <div>
+      Include only orders that are:<br/>
+      <%= select(:advanced_reporting, :shipment, [:fully_shipped, :partial_shipped], include_blank: t(:report_default), selected: params[:advanced_reporting][:shipment]) %>
+    </div>
+
+    <div>
+       <%= check_box :advanced_reporting, :state_based_on_taxable_address, { :checked => params[:advanced_reporting][:state_based_on_taxable_address] == "1" }, '1', '0' %>
+       Match State Based on Taxable Address
+    </div>
+
+    <div id="state_restriction">
+      State:<br/>
+      <%= collection_select(:advanced_reporting, :state_id, Spree::State.all, :id, :name, { :include_blank => 'All', :selected => params[:advanced_reporting][:state_id] } ) %>
+    </div>
 
     <div id="taxon_products">
     <% if @taxons -%>
@@ -14,29 +39,23 @@
     </div>
 
     <%= t("date_range") %>:
-    <div class="yui-g date-range-filter">
-      <div class="yui-u sub-field first" style="float:left;">
-        <label class="sub"><%= t("start") %></label>
-        <%= s.text_field :completed_at_gt , :class => 'datepicker'%>
-      </div>
-      <div class="yui-u sub-field" style="float:left;">
-        <label><%= t("stop") %></label>
-        <%= s.text_field :completed_at_lt ,  :class => 'datepicker' %>
-      </div>
-    </div>
+    <div class="date-range-filter field align-center">
+        <%= label_tag nil, t(:start), :class => 'inline' %>
+        <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from' %>
+        
+        <span class="range-divider">
+          <i class="icon-arrow-right"></i>
+        </span>
 
-    <p><%= button t("update") %></p>
+        <%= s.text_field :created_at_lt, :class => 'datepicker datepicker-to' %>
+        <%= label_tag nil, t(:end), :class => 'inline' %>
+    </div>
+    <div class="actions filter-actions">
+      <%= button t(:search), 'icon-search'  %>
+    </div>
+    
   <% end -%>
 </div>
-
-<% content_for :head do -%>
-<% #= javascript_include_tag 'admin/jquery.tablesorter.min.js', 'admin/advanced_reporting.js' %>
-<% #= stylesheet_link_tag 'admin/advanced_reporting' %>
-<script type="text/javascript">
-var completed_at_lt = "<%= (@report.unfiltered_params && @report.unfiltered_params[:completed_at_lt]) ? @report.unfiltered_params[:completed_at_lt] : '' %>";
-var completed_at_gt = "<%= (@report.unfiltered_params && @report.unfiltered_params[:completed_at_gt]) ? @report.unfiltered_params[:completed_at_gt] : '' %>";
-</script>
-<% end -%>
 
 <% if params[:advanced_reporting] -%>
   <% if params[:advanced_reporting][:product_id] && params[:advanced_reporting][:product_id] != '' -%>
