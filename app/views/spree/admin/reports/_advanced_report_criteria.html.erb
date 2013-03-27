@@ -14,18 +14,21 @@
     </div>
 
     <%= t("date_range") %>:
-    <div class="yui-g date-range-filter">
-      <div class="yui-u sub-field first" style="float:left;">
-        <label class="sub"><%= t("start") %></label>
-        <%= s.text_field :completed_at_gt , :class => 'datepicker'%>
-      </div>
-      <div class="yui-u sub-field" style="float:left;">
-        <label><%= t("stop") %></label>
-        <%= s.text_field :completed_at_lt ,  :class => 'datepicker' %>
-      </div>
+    <div class="date-range-filter field align-center">
+        <%= label_tag nil, t(:start), :class => 'inline' %>
+        <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from' %>
+        
+        <span class="range-divider">
+          <i class="icon-arrow-right"></i>
+        </span>
+
+        <%= s.text_field :created_at_lt, :class => 'datepicker datepicker-to' %>
+        <%= label_tag nil, t(:end), :class => 'inline' %>
     </div>
 
-    <p><%= button t("update") %></p>
+    <div class="actions filter-actions">
+      <%= button t(:search), 'icon-search'  %>
+    </div>
   <% end -%>
 </div>
 
