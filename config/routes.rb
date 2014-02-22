@@ -34,5 +34,9 @@
   match '/admin/reports/geo_profit' => 'admin/reports#geo_profit', :via => [:get, :post],
                                                                     :as => 'geo_profit_admin_reports'
 
+  namespace :admin do
+    resource :report_settings
+  end
+
   # match "/admin" => "admin/advanced_report_overview#index", :as => :admin
 end

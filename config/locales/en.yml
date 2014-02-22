@@ -1,4 +1,5 @@
 en:
+  report_settings: "Report Settings"
   adv_report:
     revenue: "Revenue"
     units: "Units"
@@ -10,3 +11,5 @@ en:
     geo_revenue: "Geo Revenue"
     geo_units: "Geo Units"
     geo_profit: "Geo Profit"
+    
+

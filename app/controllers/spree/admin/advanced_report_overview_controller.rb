@@ -18,4 +18,7 @@ class Spree::Admin::AdvancedReportOverviewController < Spree::Admin::BaseControl
            li.variant_id = v.id inner join spree_products p on v.product_id = p.id inner join spree_products_taxons pt on p.id = pt.product_id
            inner join spree_taxons t on pt.taxon_id = t.id where t.taxonomy_id = #{Spree::Taxonomy.last.id} group by t.name order by count(li.quantity) desc limit 5;")
   end
+  def edit
+    
+  end
 end
