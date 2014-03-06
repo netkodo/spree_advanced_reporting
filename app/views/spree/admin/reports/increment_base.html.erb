@@ -34,7 +34,7 @@
 <% content_for :head do -%>
     <script type="text/javascript" src="//www.google.com/jsapi"></script>
     <script type="text/javascript">
-        google.load('visualization', '1', {'packages': ['corechart']});	
+        google.load('visualization', '1', {'packages': ['corechart']});
     </script>
     <script type="text/javascript">
         google.setOnLoadCallback(drawChart);
@@ -56,7 +56,7 @@ height: 400,
 legend : 'none',
 hAxis: { slantedText: true, slantedTextAngle: 30 },
 title: '<%= type.to_s.capitalize + ' ' + @report.name %>' });
-        <% end -%> 
+        <% end -%>
 
 }
 </script>

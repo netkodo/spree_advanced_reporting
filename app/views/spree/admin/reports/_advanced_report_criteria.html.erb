@@ -38,9 +38,9 @@
     <%=t :products%>: <%= collection_select(:advanced_reporting, :product_id, @products, :id, :name, { :include_blank => 'All' } ) %><br />
     </div>
 
-    <%= t("date_range") %>:
+    <%= Spree.t("date_range") %>:
     <div class="date-range-filter field align-center">
-        <%= label_tag nil, t(:start), :class => 'inline' %>
+        <%= label_tag nil, Spree.t(:start), :class => 'inline' %>
         <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from' %>
         
         <span class="range-divider">
@@ -48,10 +48,10 @@
         </span>
 
         <%= s.text_field :created_at_lt, :class => 'datepicker datepicker-to' %>
-        <%= label_tag nil, t(:end), :class => 'inline' %>
+        <%= label_tag nil, Spree.t(:end), :class => 'inline' %>
     </div>
     <div class="actions filter-actions">
-      <%= button t(:search), 'icon-search'  %>
+      <%= button Spree.t(:search), 'icon-search'  %>
     </div>
     
   <% end -%>

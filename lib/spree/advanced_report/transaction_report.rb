@@ -62,7 +62,7 @@ class Spree::AdvancedReport::TransactionReport < Spree::AdvancedReport
         ruportdata << transaction
       end
     end
-    
+
     ruportdata << { "date" => "<b>Sales Total: #{number_to_currency(@sales_total)}</b>" }
 
     # spaces don't seem to work in column names (ruport is old...)

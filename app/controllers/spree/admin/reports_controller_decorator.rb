@@ -4,23 +4,39 @@ Spree::Admin::ReportsController.class_eval do
   # until https://github.com/spree/spree/issues/1863 is taken care of
   # this is a workaround hack to get the report definitions to load
 
-  I18n.load_path << Spree::AdvancedReporting::Engine.config.paths["config/locales"].first
-  I18n.locale = Spree::Config[:default_locale]
+  I18n.locale = Rails.application.config.i18n.default_locale
   I18n.reload!
 
   # TODO there has got to be a more ruby way to do this...
-  ADVANCED_REPORTS ||= {}
-  [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
-    # TODO we should pull the name + description for the report models themselves rather than redefining them as I18n definitions
-    ADVANCED_REPORTS[x]= {name: I18n.t("adv_report.#{x}"), :description => I18n.t("adv_report.#{x}")}
-  end
+  add_available_report! :outstanding , :outstanding
+  add_available_report! :revenue
+  add_available_report! :units
+  add_available_report! :profit
+  add_available_report! :count
+  add_available_report! :top_products
+  add_available_report! :top_customers
+  add_available_report! :geo_revenue
+  add_available_report! :geo_units
+  add_available_report! :geo_profit
 
-  Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(ADVANCED_REPORTS)
+#  ADVANCED_REPORTS ||= {}
+#  [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
+#    # TODO we should pull the name + description for the report models themselves rather than redefining them as I18n definitions
+#    ADVANCED_REPORTS[x]= {name: I18n.t("adv_report.#{x}"), :description => I18n.t("adv_report.#{x}")}
+#  end
+#
+#  Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(ADVANCED_REPORTS)
 
-  before_filter :basic_report_setup, :actions => ADVANCED_REPORTS.keys
+
+
+
+  before_filter :basic_report_setup
    
   def basic_report_setup
-    @reports = ADVANCED_REPORTS
+#     ADVANCED_REPORTS ||= {}
+#     [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
+#
+    @reports =  Spree::Admin::ReportsController.available_reports
     @products = Spree::Product.all
     @taxons = Spree::Taxon.all
     if defined?(MultiDomainExtension)

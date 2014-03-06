@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_advanced_reporting'
-  s.version     = '2.1.0'
+  s.version     = '2.1.2'
   s.summary     = 'Advanced Reporting for Spree'
   s.homepage    = 'https://github.com/iloveitaly/spree_advanced_reporting'
   s.authors	    = ['Steph Skardal', 'Michael Bianco']
@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
 
   s.has_rdoc = true
 
-  s.add_dependency 'spree_core', '>= 1.1.2'
+ s.add_dependency(%q<spree_core>, ["~> 2.0.0"])
 
   # use https://github.com/iloveitaly/ruport/tree/wicked-pdf
   s.add_dependency 'ruport'
