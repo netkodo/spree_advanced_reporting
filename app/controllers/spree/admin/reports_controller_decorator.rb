@@ -4,20 +4,12 @@ Spree::Admin::ReportsController.class_eval do
   # until https://github.com/spree/spree/issues/1863 is taken care of
   # this is a workaround hack to get the report definitions to load
 
+
   I18n.locale = Rails.application.config.i18n.default_locale
   I18n.reload!
 
   # TODO there has got to be a more ruby way to do this...
-  add_available_report! :outstanding , :outstanding
-  add_available_report! :revenue
-  add_available_report! :units
-  add_available_report! :profit
-  add_available_report! :count
-  add_available_report! :top_products
-  add_available_report! :top_customers
-  add_available_report! :geo_revenue
-  add_available_report! :geo_units
-  add_available_report! :geo_profit
+
 
 #  ADVANCED_REPORTS ||= {}
 #  [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
@@ -30,12 +22,19 @@ Spree::Admin::ReportsController.class_eval do
 
 
 
-  before_filter :basic_report_setup
+  before_filter :basic_report_setup , :only => [:index]
    
   def basic_report_setup
-#     ADVANCED_REPORTS ||= {}
-#     [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
-#
+    Spree::Admin::ReportsController.add_available_report! :outstanding , :outstanding
+    Spree::Admin::ReportsController.add_available_report! :revenue 
+    Spree::Admin::ReportsController.add_available_report! :units
+    Spree::Admin::ReportsController.add_available_report! :profit
+    Spree::Admin::ReportsController.add_available_report! :count
+    Spree::Admin::ReportsController.add_available_report! :top_products
+    Spree::Admin::ReportsController.add_available_report! :top_customers
+    Spree::Admin::ReportsController.add_available_report! :geo_revenue
+    Spree::Admin::ReportsController.add_available_report! :geo_units
+    Spree::Admin::ReportsController.add_available_report! :geo_profit   
     @reports =  Spree::Admin::ReportsController.available_reports
     @products = Spree::Product.all
     @taxons = Spree::Taxon.all
