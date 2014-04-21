@@ -1,0 +1,28 @@
+<%= render :partial => 'spree/admin/shared/configuration_menu' %>
+
+<h1 class="page-title "> <%= t(:report_settings) %></h1><br>
+
+
+<%= form_tag admin_report_settings_path, :method => :put do %>
+
+  <div data-hook="top_customers" class="field">
+    <%= hidden_field_tag 'preferences[top_customers]', '5' %>
+    <%= t(:top_customers) %>&nbsp;
+    <%=  number_field_tag('preferences[top_customers]',  Spree::Config[:top_customers]) %>
+
+  </div>
+
+  <div data-hook="top_products" class="field">
+    <%= hidden_field_tag 'preferences[top_products]', '5' %>
+    <%= t(:top_products) %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <%=  number_field_tag('preferences[top_products]',  Spree::Config[:top_products]) %>
+
+  </div>
+  <br/>
+  <div class="form-buttons" data-hook="buttons">
+    <%= button t(:update), 'icon-refresh' %>
+  </div>
+
+<% end %>
+
+
