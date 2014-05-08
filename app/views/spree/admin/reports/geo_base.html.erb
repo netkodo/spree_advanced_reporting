@@ -14,15 +14,13 @@
     </div>
 
     <ul id="show_data">
-        <li id="state">
-            <label><%= t("adv_report.states") %></label><br />
-            <%= link_to "CSV", @report.download_url(request.fullpath, 'csv', "state") %>
-            <%= link_to "PDF", @report.download_url(request.fullpath, 'pdf', "state") %>
+        <li class="selected" id="state">
+            <label>States</label><br />
+            <a href="<%= @report.download_url(request.fullpath, 'csv', "state") %>">CSV</a>
         </li>
         <li id="country">
-            <label><%= t("adv_report.countries") %></label><br />
-            <%= link_to "CSV", @report.download_url(request.fullpath, 'csv', "country") %>
-            <%= link_to "PDF", @report.download_url(request.fullpath, 'pdf', "country") %>
+            <label>Countries</label><br />
+            <a href="<%= @report.download_url(request.fullpath, 'csv', "country") %>">CSV</a>
         </li>
     </ul>
     <%= render :partial => 'spree/admin/reports/advanced_report_criteria', :locals => {} %>
@@ -31,7 +29,7 @@
 <% content_for :head do -%>
     <script type="text/javascript" src="http://www.google.com/jsapi"></script>
     <script type="text/javascript">
-        google.load('visualization', '1', {'packages': ['geomap']});        
+        google.load('visualization', '1', {'packages': ['geomap']});
     </script>
     <script type="text/javascript">
         google.setOnLoadCallback(drawMaps);
@@ -48,7 +46,7 @@ data_<%= type.to_s %>.setValue(<%= i.to_s %>, 1, <%= p.data[@report.column].to_s
         <% end -%>
 
 var options_<%= type.to_s %> = { 'width' : '800px', 'height' : '500px' };
-<% if type == :state %> 
+<% if type == :state %>
     options_<%= type.to_s %>['region'] = 'US';
         <% end -%>
 
