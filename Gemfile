@@ -1,5 +1,4 @@
 source 'http://rubygems.org'
 
-gem 'ruport', :git => 'git://github.com/iloveitaly/ruport.git', :branch => 'ruby19-compat'
+gem 'ruport', github: 'ruport/ruport', branch: 'ruby-19-compat'
 
-gemspec
