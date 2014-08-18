@@ -19,16 +19,16 @@ class Spree::AdvancedReport::GeoReport::GeoProfit < Spree::AdvancedReport::GeoRe
       profit = profit(order)
       next unless order.bill_address
       if order.bill_address.state
-        data[:state][order.bill_address.state_id] ||= {
-          :name => order.bill_address.state.name,
-          :profit => 0
+        data[:state][order.bill_address.state_id]          ||= {
+            :name   => order.bill_address.state.name,
+            :profit => 0
         }
         data[:state][order.bill_address.state_id][:profit] += profit
       end
       if order.bill_address.country
-        data[:country][order.bill_address.country_id] ||= {
-          :name => order.bill_address.country.name,
-          :profit => 0
+        data[:country][order.bill_address.country_id]          ||= {
+            :name   => order.bill_address.country.name,
+            :profit => 0
         }
         data[:country][order.bill_address.country_id][:profit] += profit
       end

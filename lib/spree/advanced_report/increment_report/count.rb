@@ -17,10 +17,10 @@ class Spree::AdvancedReport::IncrementReport::Count < Spree::AdvancedReport::Inc
     self.orders.each do |order|
       date = {}
       INCREMENTS.each do |type|
-        date[type] = get_bucket(type, order.completed_at)
+        date[type]             = get_bucket(type, order.completed_at)
         data[type][date[type]] ||= {
-          :value => 0, 
-          :display => get_display(type, order.completed_at),
+            :value   => 0,
+            :display => get_display(type, order.completed_at),
         }
       end
       order_count = order_count(order)

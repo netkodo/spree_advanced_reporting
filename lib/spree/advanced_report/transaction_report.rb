@@ -14,9 +14,9 @@ class Spree::AdvancedReport::TransactionReport < Spree::AdvancedReport
     super(params)
 
     self.ruportdata = Ruport::Data::Group.new({
-      :name => "#{self.name} #{self.date_range}",
-      :column_names => %w[date type id total state]
-    })
+                                                  :name         => "#{self.name} #{self.date_range}",
+                                                  :column_names => %w[date type id total state]
+                                              })
 
     card_listing = {}
 
@@ -38,11 +38,11 @@ class Spree::AdvancedReport::TransactionReport < Spree::AdvancedReport
         end
 
         (card_listing[credit_cart_type] ||= []) << {
-          "date" => payment.source.created_at.to_formatted_s(:db),
-          "type" => credit_cart_type.humanize.titlecase,
-          "id" => gateway_link,
-          "total" => payment.amount,
-          "state" => payment.state,
+            "date"  => payment.source.created_at.to_formatted_s(:db),
+            "type"  => credit_cart_type.humanize.titlecase,
+            "id"    => gateway_link,
+            "total" => payment.amount,
+            "state" => payment.state,
         }
       end
     end
@@ -50,11 +50,11 @@ class Spree::AdvancedReport::TransactionReport < Spree::AdvancedReport
     @sales_total = 0
 
     card_listing.keys.sort.each do |card_name|
-      card_total = card_listing[card_name].map { |c| c["total"] * (c["state"] == 'void' ? 0 : 1) }.sum
+      card_total   = card_listing[card_name].map { |c| c["total"] * (c["state"] == 'void' ? 0 : 1) }.sum
       @sales_total += card_total
 
       ruportdata << {
-        "date" => "<b>#{card_name.humanize.titlecase} (#{card_listing[card_name].count}): #{number_to_currency(card_total)}</b>"
+          "date" => "<b>#{card_name.humanize.titlecase} (#{card_listing[card_name].count}): #{number_to_currency(card_total)}</b>"
       }
 
       card_listing[card_name].each do |transaction|
