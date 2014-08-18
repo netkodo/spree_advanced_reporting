@@ -18,6 +18,7 @@ Spree::Admin::ReportsController.class_eval do
   add_available_report! :geo_revenue
   add_available_report! :geo_units
   add_available_report! :geo_profit
+  add_available_report! :geo_sales
 
 #  ADVANCED_REPORTS ||= {}
 #  [ :outstanding, :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit, :transactions].each do |x|
@@ -26,8 +27,6 @@ Spree::Admin::ReportsController.class_eval do
 #  end
 #
 #  Spree::Admin::ReportsController::AVAILABLE_REPORTS.merge!(ADVANCED_REPORTS)
-
-
 
 
   before_filter :basic_report_setup
@@ -99,7 +98,7 @@ Spree::Admin::ReportsController.class_eval do
 
   def count
     @report = Spree::AdvancedReport::IncrementReport::Count.new(params)
-    base_report_render("profit")
+    base_report_render("count")
   end
 
   def top_products
@@ -126,6 +125,11 @@ Spree::Admin::ReportsController.class_eval do
   def geo_profit
     @report = Spree::AdvancedReport::GeoReport::GeoProfit.new(params)
     geo_report_render("geo_profit")
+  end
+
+  def geo_sales
+    @report = Spree::AdvancedReport::GeoReport::GeoSales.new(params)
+    geo_report_render("geo_sales")
   end
 
   def transactions
