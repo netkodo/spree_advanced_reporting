@@ -1,20 +1,21 @@
-require 'rake'
-require 'rake/testtask'
-require 'rake/packagetask'
-require 'rubygems/package_task'
+require 'bundler'
+Bundler::GemHelper.install_tasks
+
 require 'rspec/core/rake_task'
-require 'cucumber/rake/task'
-require 'spree_core/testing_support/common_rake'
+require 'spree/testing_support/extension_rake'
 
 RSpec::Core::RakeTask.new
-Cucumber::Rake::Task.new
 
-task :default => [:spec, :cucumber ]
+task :default do
+  if Dir["spec/dummy"].empty?
+    Rake::Task[:test_app].invoke
+    Dir.chdir("../../")
+  end
+  Rake::Task[:spec].invoke
+end
 
-spec = eval(File.read('advanced_reporting.gemspec'))
-
-desc "Generates a dummy app for testing"
+desc 'Generates a dummy app for testing'
 task :test_app do
-  ENV['LIB_NAME'] = 'advanced_reporting'
-  Rake::Task['common:test_app'].invoke
+  ENV['LIB_NAME'] = 'spree_advanced_reporting'
+  Rake::Task['extension:test_app'].invoke
 end

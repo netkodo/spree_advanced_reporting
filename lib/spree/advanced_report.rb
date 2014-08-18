@@ -17,23 +17,23 @@ module Spree
       # by setting the defaults before calling super
       self.params ||= params
 
-      self.data = {}
-      self.ruportdata = {}
+      self.data              = {}
+      self.ruportdata        = {}
       self.unfiltered_params = params[:search].blank? ? {} : params[:search].clone
 
-      params[:search] ||= {}
+      params[:search]             ||= {}
       params[:advanced_reporting] ||= {}
 
       if Order.count > 0
         begin
           params[:search][:created_at_gt] = Time.zone.parse(params[:search][:created_at_gt]).beginning_of_day
-        rescue 
+        rescue
           params[:search][:created_at_gt] = Date.today.beginning_of_day
         end
 
         # TODO if lt is defined, and gt is not, gt then should use better default than end of today
         # maybe 24 hours before the defined lt end of day
-        
+
         begin
           params[:search][:created_at_lt] = Time.zone.parse(params[:search][:created_at_lt]).end_of_day
         rescue
@@ -58,22 +58,22 @@ module Spree
 
       if params[:advanced_reporting][:order_type] == 'shipped'
         shipped_search_params = {
-          :shipped_at_gt => params[:search][:created_at_gt],
-          :shipped_at_lt => params[:search][:created_at_lt],
-          :order_state_not_eq => 'canceled',
-          :order_completed_at_not_null => true
+            :shipped_at_gt               => params[:search][:created_at_gt],
+            :shipped_at_lt               => params[:search][:created_at_lt],
+            :order_state_not_eq          => 'canceled',
+            :order_completed_at_not_null => true
         }
 
         if params[:advanced_reporting][:state_id].present?
           shipped_search_params[
-            filter_address == 'shipping' ? :order_ship_address_state_id_eq : :order_bill_address_state_id_eq
+              filter_address == 'shipping' ? :order_ship_address_state_id_eq : :order_bill_address_state_id_eq
           ] = params[:advanced_reporting][:state_id]
         end
 
         # including the ransack predicate will not speed up the SQL query but will not include only fully shipped orders
         # TODO hopefully we can trust spree's built in shipment state in the future
         # https://github.com/spree/spree/blob/1-3-stable/core/app/models/spree/order_updater.rb#L68
-        only_fully_shipped = params[:advanced_reporting][:shipment] == 'fully_shipped'
+        only_fully_shipped                                                 = params[:advanced_reporting][:shipment] == 'fully_shipped'
         shipped_search_params[:order_inventory_units_shipment_id_not_null] = true if only_fully_shipped
 
         # the tricky part here is that orders can have multiple shipments
@@ -81,7 +81,7 @@ module Spree
         # by choosing to include the order in the earliest report possible
         # (i.e. the first order that shipped) and exclude it from any reports after that
 
-        @search = Shipment.includes(:order).search shipped_search_params
+        @search                                                            = Shipment.includes(:order).search shipped_search_params
 
         self.orders = @search.result(:distinct => true).select do |shipment|
           # these manual exclusions could not be done via SQL queries as far as I could tell
@@ -97,15 +97,15 @@ module Spree
         end.map(&:order)
       else
         params[:search][:completed_at_not_null] = true
-        params[:search][:state_not_eq] = 'canceled'
+        params[:search][:state_not_eq]          = 'canceled'
 
         if params[:advanced_reporting][:state_id].present?
           params[:search][
-            filter_address == 'shipping' ? :ship_address_state_id_eq : :bill_address_state_id_eq
+              filter_address == 'shipping' ? :ship_address_state_id_eq : :bill_address_state_id_eq
           ] = params[:advanced_reporting][:state_id]
         end
 
-        only_fully_shipped = params[:advanced_reporting][:shipment] == 'fully_shipped'
+        only_fully_shipped                            = params[:advanced_reporting][:shipment] == 'fully_shipped'
         params[:inventory_units_shipment_id_not_null] = true if only_fully_shipped
 
         @search = Order.search(params[:search])
@@ -147,13 +147,13 @@ module Spree
         elsif self.unfiltered_params[:created_at_lt] != ''
           self.date_text += " Before #{self.unfiltered_params[:created_at_lt]}"
 
-        # TODO this was pulled in from another branch and has some nice internationalization improvements
-        # if self.unfiltered_params[:created_at_greater_than] != '' && self.unfiltered_params[:created_at_less_than] != ''
-        #   self.date_text += " #{I18n.t("adv_report.base.from")} #{self.unfiltered_params[:created_at_greater_than]} to #{self.unfiltered_params[:created_at_less_than]}"
-        # elsif self.unfiltered_params[:created_at_greater_than] != ''
-        #   self.date_text += " #{I18n.t("adv_report.base.after")} #{self.unfiltered_params[:created_at_greater_than]}"
-        # elsif self.unfiltered_params[:created_at_less_than] != ''
-        #   self.date_text += " #{I18n.t("adv_report.base.before")} #{self.unfiltered_params[:created_at_less_than]}"
+          # TODO this was pulled in from another branch and has some nice internationalization improvements
+          # if self.unfiltered_params[:created_at_greater_than] != '' && self.unfiltered_params[:created_at_less_than] != ''
+          #   self.date_text += " #{I18n.t("adv_report.base.from")} #{self.unfiltered_params[:created_at_greater_than]} to #{self.unfiltered_params[:created_at_less_than]}"
+          # elsif self.unfiltered_params[:created_at_greater_than] != ''
+          #   self.date_text += " #{I18n.t("adv_report.base.after")} #{self.unfiltered_params[:created_at_greater_than]}"
+          # elsif self.unfiltered_params[:created_at_less_than] != ''
+          #   self.date_text += " #{I18n.t("adv_report.base.before")} #{self.unfiltered_params[:created_at_less_than]}"
         else
           self.date_text += " #{I18n.t("adv_report.base.all")}"
         end
@@ -163,8 +163,8 @@ module Spree
     end
 
     def download_url(base, format, report_type = nil)
-      elements = []
-      params[:advanced_reporting] ||= {}
+      elements                                   = []
+      params[:advanced_reporting]                ||= {}
       params[:advanced_reporting]["report_type"] = report_type if report_type
       if params
         [:search, :advanced_reporting].each do |type|
@@ -173,7 +173,7 @@ module Spree
           end
         end
       end
-      base.gsub!(/^\/\//,'/')
+      base.gsub!(/^\/\//, '/')
       base + '.' + format + '?' + elements.join('&')
     end
 
@@ -185,18 +185,26 @@ module Spree
         rev = order.line_items.select { |li| li.product && li.product.taxons.include?(self.taxon) }.inject(0) { |a, b| a += b.quantity * b.price }
       end
       adjustment_revenue = order.adjustments.sum(:amount)
-      rev += adjustment_revenue if rev > 0
+      rev                += adjustment_revenue if rev > 0
       self.product_in_taxon ? rev : 0
     end
 
     def profit(order)
-      profit = order.line_items.inject(0) { |profit, li| profit + (li.variant.price - li.variant.cost_price.to_f)*li.quantity }
+      profit = order.line_items.inject(0) do |profit, li|
+        variant_cost  = li.variant.cost_price || li.variant.product.cost_price #use product cost price if variant cost price wasn't defined
+        variant_price = li.variant.price || li.variant.product.price #use product price if variant price wasn't defined
+        profit + (variant_price.to_f - variant_cost.to_f) * li.quantity
+      end
+
       if !self.product.nil? && product_in_taxon
         profit = order.line_items.select { |li| li.product == self.product }.inject(0) { |profit, li| profit + (li.variant.price - li.variant.cost_price.to_f)*li.quantity }
+
       elsif !self.taxon.nil?
         profit = order.line_items.select { |li| li.product && li.product.taxons.include?(self.taxon) }.inject(0) { |profit, li| profit + (li.variant.price - li.variant.cost_price.to_f)*li.quantity }
       end
+
       profit += order.adjustments.sum(:amount)
+
       self.product_in_taxon ? profit : 0
     end
 
