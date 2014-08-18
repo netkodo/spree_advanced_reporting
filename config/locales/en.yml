@@ -4,6 +4,7 @@ en:
   sales_total_description: "Sales Total"
   sales_total: "Sales Total"
   adv_report:
+    sales: "Sales"
     increments:
       - daily
       - weekly
@@ -94,3 +95,10 @@ en:
         name: "Units Sold by Geography"
         description: "Unit sales divided geographically, into states and countries"
         column: "Units"
+      sales:
+        table:
+          - location
+          - Sales
+        name: "Sales by Geography"
+        description: "Sales divided geographically, into states and countries"
+        column: "Sales"
