@@ -102,13 +102,13 @@ Spree::Admin::ReportsController.class_eval do
   end
 
   def top_products
-    @report = Spree::AdvancedReport::TopReport::TopProducts.new(params, Spree::Config[:top_products]-1)
+    @report = Spree::AdvancedReport::TopReport::TopProducts.new(params, Spree::Config[:top_products].to_i - 1)
     base_report_top_render("top_products")
   end
 
   def top_customers
    # Rails.logger.info(Spree::Config[:top_customers])
-    @report = Spree::AdvancedReport::TopReport::TopCustomers.new(params, Spree::Config[:top_customers]-1)
+    @report = Spree::AdvancedReport::TopReport::TopCustomers.new(params, Spree::Config[:top_customers].to_i - 1)
     base_report_top_render("top_customers")
   end
 
