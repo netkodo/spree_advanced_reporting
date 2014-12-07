@@ -1,0 +1,104 @@
+---
+de:
+  report_default: Report Default
+  sales_total_description: "Verkäufe Gesamt"
+  sales_total: "Verkäufe Gesamt"
+  adv_report:
+    sales: "Verkäufe"
+    increments:
+      - daily
+      - weekly
+      - monthly
+      - quarterly
+      - yearly
+    dashboard: Dashboard
+    daily: Täglich
+    weekly: Wöchentlich
+    monthly: Monatlich
+    quarterly: Quartalsweise
+    yearly: Jährlich
+    revenue: "Umsatz"
+    units: "Einheiten"
+    profit: "Gewinn"
+    count: "Bestellungen"
+    top_products: "Top Produkte"
+    top_customers: "Top Kunden"
+    submit: "Submit"
+    geo_revenue: "Geo Umsatz"
+    geo_units: "Geo Einheiten"
+    geo_profit: "Geo Gewinn"
+    transactions: Transaktionen
+    outstanding: Ausstehend
+    states: Bundesländer
+    countries: Länder
+    base:
+      range: Zeitspanne
+      from: Von
+      after: Bis
+      before: Bevor
+      all: All
+      name: "Basis Report"
+      description: "Basis Report"
+    top_report:
+      top_customers:
+        table:
+          - email
+          - Units
+          - Revenue
+        customer_email: Kundenemail
+        name: "Top Kunden"
+        description: "Top Kunden, errechnet nach Umsatz"
+      top_products:
+        table:
+          - name
+          - Units
+          - Revenue
+        product_name: Name des Produkts
+        name: "Top Produkte nach Umsatz"
+        description: "Top Produkte, errechnet nach Umsatz"
+    increment_report:
+      count:
+        name: "Bestellungen"
+        description: "Absolute Anzahl abgeschlossener Bestellungen"
+        column: "Anzahl"
+      profit:
+        name: "Gewinn"
+        description: "Absoluter Profit in Bestellungen, wobei Profit die Summe der Positionen x Preis minus dem Kosten der Posistion"
+        column: "Gewinn"
+      revenue:
+        name: "Umsatz"
+        description: "Absoluter Bestellumsatz, wobei Umsatz die Summe der Positionen ist, exclusive Versand und Steuern"
+        column: "Umsatz"
+      units:
+        name: "Einheiten verkauft"
+        description: "Absolute Anzahl verkaufer Eibheiten, die Summe der Position x Anzahl pro Bestellung oder pro Position"
+        column: "Einheiten"
+    geo_report:
+      profit:
+        table:
+          - location
+          - Profit
+        name: "Gewinn nach Region"
+        description: "Gewinn aufgeteilt nach geographischen Regionen, Bundesländer oder Länder"
+        column: "Gewinn"
+      revenue:
+        table:
+          - location
+          - Revenue
+        name: "Umsatz nach Region"
+        description: "Umsatz aufgeteilt nach geographischen Regionen, Bundesländer oder Länder"
+        column: "Umsatz"
+      units:
+        table:
+          - location
+          - Units
+        name: "Einheiten verkauft nach Region"
+        description: "Verkaufte Einheiten, aufgeteilt nach geographischen Regionen, Bundesländer oder Länder"
+        column: "Einheiten"
+      sales:
+        table:
+          - location
+          - Sales
+        name: "Verkäufe nach Region"
+        description: "Verkäufe, aufgeteilt nach geographischen Regionen, Bundesländer oder Länder"
+        column: "Verkäufe"
