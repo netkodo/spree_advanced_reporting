@@ -1,7 +1,7 @@
 class Spree::Admin::AdvancedReportOverviewController < Spree::Admin::BaseController
   def index
     @reports = Spree::Admin::ReportsController::ADVANCED_REPORTS
-    @products = Spree::Product.all
+    #@products = Spree::Product.all
     @taxons = Spree::Taxon.all
     if defined?(MultiDomainExtension)
       @stores = Store.all
