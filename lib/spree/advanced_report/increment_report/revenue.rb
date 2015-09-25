@@ -18,10 +18,12 @@ class Spree::AdvancedReport::IncrementReport::Revenue < Spree::AdvancedReport::I
     self.orders.each do |order|
       date = {}
       INCREMENTS.each do |type|
-        date[type] = get_bucket(type, order.completed_at)
+        date[type] = get_bucket(type, order.created_at)
         data[type][date[type]] ||= {
-          :value => 0,
-          :display => get_display(type, order.completed_at),
+            :values => {
+                :value => 0
+            },
+            :display => get_display(type, order.created_at),
         }
       end
       rev = order.item_total
@@ -31,16 +33,16 @@ class Spree::AdvancedReport::IncrementReport::Revenue < Spree::AdvancedReport::I
         rev = order.line_items.select { |li| li.product && li.product.taxons.include?(self.taxon) }.inject(0) { |a, b| a += b.quantity * b.price }
       end
       rev = 0 if !self.product_in_taxon
-      INCREMENTS.each { |type| data[type][date[type]][:value] += rev }
+      INCREMENTS.each { |type| data[type][date[type]][:values][:value] += rev }
       self.total += rev
     end
 
     generate_ruport_data
 
-    INCREMENTS.each { |type| ruportdata[type].replace_column("Revenue") { |r| "$%0.2f" % r["Revenue"] } }
+    INCREMENTS.each { |type| ruportdata[type].replace_column("Revenue") { |r| "%0.2f" % r["Revenue"] } }
   end
 
   def format_total
-    '$' + ((self.total*100).round.to_f / 100).to_s
+    'Kč' + ((self.total*100).round.to_f / 100).to_s
   end
 end

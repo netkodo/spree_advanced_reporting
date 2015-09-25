@@ -17,14 +17,16 @@ class Spree::AdvancedReport::IncrementReport::Units < Spree::AdvancedReport::Inc
     self.orders.each do |order|
       date = {}
       INCREMENTS.each do |type|
-        date[type] = get_bucket(type, order.completed_at)
+        date[type] = get_bucket(type, order.created_at)
         data[type][date[type]] ||= {
-          :value => 0, 
-          :display => get_display(type, order.completed_at),
+            :values => {
+                :value => 0
+            },
+            :display => get_display(type, order.created_at),
         }
       end
       units = units(order)
-      INCREMENTS.each { |type| data[type][date[type]][:value] += units }
+      INCREMENTS.each { |type| data[type][date[type]][:values][:value] += units }
       self.total += units
     end
 

@@ -5,8 +5,9 @@ class Spree::AdvancedReport::IncrementReport < Spree::AdvancedReport
   def initialize(params)
     super(params)
   
-    self.increments = INCREMENTS 
-    self.ruportdata = INCREMENTS.inject({}) { |h, inc| h[inc] = Table(%w[key display value]); h }
+    self.increments = INCREMENTS
+    # self.ruportdata = INCREMENTS.inject({}) { |h, inc| h[inc] = Table(%w[key display value]); h }
+    self.ruportdata = INCREMENTS.inject({}) { |h, inc| h[inc] = Table(%w[key display]); h }
     self.data = INCREMENTS.inject({}) { |h, inc| h[inc] = {}; h }
 
     self.dates = {
@@ -34,12 +35,24 @@ class Spree::AdvancedReport::IncrementReport < Spree::AdvancedReport
     }
   end
 
-  def generate_ruport_data
-    self.all_data = Table(%w[increment key display value]) 
+  def generate_ruport_data(additional_columns = [])
+    columns = additional_columns.blank? ? %w[key display value] : %w[key display value] + additional_columns
+    self.ruportdata = INCREMENTS.inject({}) { |h, inc| h[inc] = Table(columns); h } if additional_columns.present?
+    self.all_data = Table(columns)
+
     INCREMENTS.each do |inc|
-      data[inc].each { |k,v| ruportdata[inc] << { "key" => k, "display" => v[:display], "value" => v[:value] } }
+      data[inc].each do |k,v|
+        values = {}
+        v[:values].each do |_, value|
+          values[_.to_s] = value
+        end
+        ruportdata[inc] << { "key" => k, "display" => v[:display] }.merge(values)
+      end
       ruportdata[inc].data.each do |p|
-        self.all_data << { "increment" => inc.to_s.capitalize, "key" => p.data["key"], "display" => p.data["display"], "value" => p.data["value"] }
+        values = { "increment" => inc.to_s.capitalize, "key" => p.data["key"], "display" => p.data["display"]}
+        additional_columns.each {|col| values.merge({col => p.data[col]})}
+        # self.all_data << { "increment" => inc.to_s.capitalize, "key" => p.data["key"], "display" => p.data["display"], "value" => p.data["value"], "cancelled" => p.data["cancelled"], "ratio" => p.data["ratio"] }
+        self.all_data << { "increment" => inc.to_s.capitalize, "key" => p.data["key"], "display" => p.data["display"], "value" => p.data["value"]}.merge(values)
       end
       ruportdata[inc].sort_rows_by!(["key"])
       ruportdata[inc].remove_column("key")
@@ -48,7 +61,10 @@ class Spree::AdvancedReport::IncrementReport < Spree::AdvancedReport
     end
     self.all_data.sort_rows_by!(["key"])
     self.all_data.remove_column("key")
-    self.all_data = Grouping(self.all_data, :by => "increment") 
+
+    # self.all_data = Grouping(self.all_data, :by => "increment")
+    self.all_data
+
   end
   
   def get_bucket(type, completed_at)

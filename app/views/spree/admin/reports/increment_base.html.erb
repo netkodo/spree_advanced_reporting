@@ -1,9 +1,14 @@
+<h5>
+  <%=raw @report.format_total %>
+</h5>
 <% @report.increments.each do |type| -%>
     <div id="<%= type.to_s %>_data" <%= 'style=display:none;' if type.to_s != 'daily' %> class="advanced_reporting_data">
         <div id="<%= type.to_s %>_chart"></div>
         <%= raw @report.ruportdata[type].to_html %>
     </div>
 <% end -%>
+
+
 
 <% content_for :page_actions do %>
     <div class="report_details">
