@@ -10,18 +10,19 @@ Spree::Admin::ReportsController.class_eval do
   I18n.reload!
 
   ADVANCED_REPORTS ||= {}
-  [ :revenue, :units, :profit, :count, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit].each do |x|
-    ADVANCED_REPORTS[x]= {name: I18n.t("adv_report."+x.to_s), :description => I18n.t("adv_report."+x.to_s)}
+  [ :count, :revenue].each do |x|
+  # [ :count, :revenue, :units, :profit, :top_products, :top_customers, :geo_revenue, :geo_units, :geo_profit].each do |x|
+    ADVANCED_REPORTS[x]= {name: I18n.t("adv_report."+x.to_s), :description => I18n.t("adv_report.description."+x.to_s)}
   end
 
    
   def basic_report_setup
     @reports = ADVANCED_REPORTS
     #@products = Spree::Product.all
-    @taxons = Spree::Taxon.all
-    if defined?(MultiDomainExtension)
-      @stores = Store.all
-    end
+    # @taxons = Spree::Taxon.all
+    # if defined?(MultiDomainExtension)
+    #   @stores = Store.all
+    # end
   end
 
   def geo_report_render(filename)

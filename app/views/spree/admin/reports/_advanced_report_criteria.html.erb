@@ -1,23 +1,23 @@
-<div id="advanced_report_search">
+<div id="advanced_report_search" >
   <%= form_for :search do |s| %>
-    <% if @stores -%>
-        Store:<br /><%= collection_select(:search, :store_id, @stores, :id, :name, { :include_blank => 'All' } ) %><br />
-        <br>
+    <%# if @stores -%>
+        <!--&lt;!&ndash;Store:<br /><%#= collection_select(:search, :store_id, @stores, :id, :name, { :include_blank => 'All' } ) %><br />&ndash;&gt;-->
+        <!--&lt;!&ndash;<br>&ndash;&gt;-->
 
-    <% end -%>
+    <!--<#% #end -%>-->
 
-    <div id="taxon_products">
-    <% if @taxons -%>
-        <%=t "taxons"%>: <%= collection_select(:advanced_reporting, :taxon_id, @taxons, :id, :name, { :include_blank => 'All' } ) %>
-    <% end -%>
-    <%#=t :products%>: <%#= collection_select(:advanced_reporting, :product_id, @products, :id, :name, { :include_blank => 'All' } ) %><br />
-    </div>
+    <!--&lt;!&ndash;<div id="taxon_products">&ndash;&gt;-->
+    <!--<#% #if @taxons -%>-->
+        <!--&lt;!&ndash;<%#=t "taxons"%>: <%#= collection_select(:advanced_reporting, :taxon_id, @taxons, :id, :name, { :include_blank => 'All' } ) %>&ndash;&gt;-->
+    <!--<#% #end -%>-->
+    <%#=t :products%> <%#= collection_select(:advanced_reporting, :product_id, @products, :id, :name, { :include_blank => 'All' } ) %><br />
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
     <%= t("date_range") %>:
     <div class="date-range-filter field align-center">
         <%= label_tag nil, t(:start), :class => 'inline' %>
         <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from' %>
-        
+
         <span class="range-divider">
           <i class="icon-arrow-right"></i>
         </span>
@@ -36,16 +36,16 @@
 <% #= javascript_include_tag 'admin/jquery.tablesorter.min.js', 'admin/advanced_reporting.js' %>
 <% #= stylesheet_link_tag 'admin/advanced_reporting' %>
 <script type="text/javascript">
-var completed_at_lt = "<%= (@report.unfiltered_params && @report.unfiltered_params[:completed_at_lt]) ? @report.unfiltered_params[:completed_at_lt] : '' %>";
-var completed_at_gt = "<%= (@report.unfiltered_params && @report.unfiltered_params[:completed_at_gt]) ? @report.unfiltered_params[:completed_at_gt] : '' %>";
+var created_at_lt = "<%= (@report.unfiltered_params && @report.unfiltered_params[:created_at_lt]) ? @report.unfiltered_params[:created_at_lt] : '' %>";
+var created_at_gt = "<%= (@report.unfiltered_params && @report.unfiltered_params[:created_at_gt]) ? @report.unfiltered_params[:created_at_gt] : '' %>";
 </script>
 <% end -%>
 
-<% if params[:advanced_reporting] -%>
-  <% if params[:advanced_reporting][:product_id] && params[:advanced_reporting][:product_id] != '' -%>
-  <input type="hidden" id="product_id" value="<%= params[:advanced_reporting][:product_id] %>" />
-  <% end -%>
-  <% if params[:advanced_reporting][:taxon_id] && params[:advanced_reporting][:taxon_id] != '' -%>
-  <input type="hidden" id="taxon_id" value="<%= params[:advanced_reporting][:taxon_id] %>" />
-  <% end -%>
-<% end -%>
+<% #if params[:advanced_reporting] -%>
+  <%# if params[:advanced_reporting][:product_id] && params[:advanced_reporting][:product_id] != '' -%>
+  <!--<input type="hidden" id="product_id" value="<%#= params[:advanced_reporting][:product_id] %>" />-->
+  <% #end -%>
+  <% #if params[:advanced_reporting][:taxon_id] && params[:advanced_reporting][:taxon_id] != '' -%>
+  <!--<input type="hidden" id="taxon_id" value="<%#= params[:advanced_reporting][:taxon_id] %>" />-->
+  <% #end -%>
+<% #end -%>

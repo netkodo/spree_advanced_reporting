@@ -11,6 +11,18 @@ en:
     geo_revenue: "Geo Revenue"
     geo_units: "Geo Units"
     geo_profit: "Geo Profit"
-  sales_total: Sales Total
+    sales_total: Sales Total
+    description:
+      revenue: "Revenue"
+      units: "Units"
+      profit: "Profit"
+      count: "Total orders, cancelled orders and cancelled orders ratio"
+      top_products: "Top Products"
+      top_customers: "Top Customers"
+      geo_revenue: "Geo Revenue"
+      geo_units: "Geo Units"
+      geo_profit: "Geo Profit"
+      sales_total: Standard Sales Total report
+
     
 

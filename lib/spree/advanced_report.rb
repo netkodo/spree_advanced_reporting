@@ -20,7 +20,7 @@ module Spree
       params[:search] ||= {}
       if params[:search][:created_at_gt].blank?
         if (Order.count > 0) && Order.minimum(:created_at)
-          params[:search][:created_at_gt] = Order.minimum(:created_at).beginning_of_day
+          params[:search][:created_at_gt] = Order.maximum(:created_at).beginning_of_day # when starting just display orders from today
         end
       else
         params[:search][:created_at_gt] = Time.zone.parse(params[:search][:created_at_gt]).beginning_of_day rescue ""
@@ -63,12 +63,12 @@ module Spree
       # Above searchlogic date settings
       self.date_text = "Date Range:"
       if self.unfiltered_params
-        if self.unfiltered_params[:completed_at_gt] != '' && self.unfiltered_params[:completed_at_lt] != ''
-          self.date_text += " From #{self.unfiltered_params[:completed_at_gt]} to #{self.unfiltered_params[:completed_at_lt]}"
-        elsif self.unfiltered_params[:completed_at_gt] != ''
-          self.date_text += " After #{self.unfiltered_params[:completed_at_gt]}"
-        elsif self.unfiltered_params[:completed_at_lt] != ''
-          self.date_text += " Before #{self.unfiltered_params[:completed_at_lt]}"
+        if self.unfiltered_params[:created_at_gt] != '' && self.unfiltered_params[:created_at_lt] != ''
+          self.date_text += " From #{self.unfiltered_params[:created_at_gt]} to #{self.unfiltered_params[:created_at_lt]}"
+        elsif self.unfiltered_params[:created_at_gt] != ''
+          self.date_text += " After #{self.unfiltered_params[:created_at_gt]}"
+        elsif self.unfiltered_params[:created_at_lt] != ''
+          self.date_text += " Before #{self.unfiltered_params[:created_at_lt]}"
         else
           self.date_text += " All"
         end
@@ -113,13 +113,7 @@ module Spree
     end
 
     def units(order)
-      units = order.line_items.sum(:quantity)
-      if !self.product.nil? && product_in_taxon
-        units = order.line_items.select { |li| li.product == self.product }.inject(0) { |a, b| a += b.quantity }
-      elsif !self.taxon.nil?
-        units = order.line_items.select { |li| li.product && li.product.taxons.include?(self.taxon) }.inject(0) { |a, b| a += b.quantity }
-      end
-      self.product_in_taxon ? units : 0
+      order.line_items.sum(:quantity)
     end
 
     def order_count(order)

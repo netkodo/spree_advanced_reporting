@@ -1,7 +1,7 @@
 cs:
   report_settings: "Report Settings"
   adv_report:
-    revenue: "Revenue"
+    revenue: "Revenue, Shipping, Average basket"
     units: "Units"
     profit: "Profit"
     count: "Order Count"
@@ -11,6 +11,18 @@ cs:
     geo_revenue: "Geo Revenue"
     geo_units: "Geo Units"
     geo_profit: "Geo Profit"
+    description:
+      revenue: "Total order revenue without tax, shipping without tax and average basket(subtotal + shipping) without tax"
+      units: "Units"
+      profit: "Profit"
+      count: "Total orders, cancelled orders and cancelled orders ratio"
+      top_products: "Top Products"
+      top_customers: "Top Customers"
+      submit: "Submit"
+      geo_revenue: "Geo Revenue"
+      geo_units: "Geo Units"
+      geo_profit: "Geo Profit"
+
   sales_total: Sales Total
     
 
