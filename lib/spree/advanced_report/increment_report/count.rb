@@ -18,7 +18,7 @@ class Spree::AdvancedReport::IncrementReport::Count < Spree::AdvancedReport::Inc
     self.total = 0
     self.cancelled = 0
     self.ratio = 0
-    self.orders.each do |order|
+    self.orders.where("state = 'complete' or state = 'canceled'").each do |order|
       date = {}
       INCREMENTS.each do |type|
         date[type] = get_bucket(type, order.created_at)
@@ -31,13 +31,13 @@ class Spree::AdvancedReport::IncrementReport::Count < Spree::AdvancedReport::Inc
           :display => get_display(type, order.created_at),
         }
       end
-      order_count = order_count(order)
+      # order_count = order_count(order)
       INCREMENTS.each do |type|
-        data[type][date[type]][:values][:value] += order_count
+        data[type][date[type]][:values][:value] += 1
         data[type][date[type]][:values][:cancelled] += 1 if order.state == 'canceled'
         data[type][date[type]][:values][:ratio] = "#{((data[type][date[type]][:values][:cancelled].to_f) / (data[type][date[type]][:values][:value].to_f) * 100).round(2)} %"
       end
-      self.total += order_count
+      self.total += 1
       self.cancelled += 1 if order.state == 'canceled'
     end
 
