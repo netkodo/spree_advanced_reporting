@@ -39,11 +39,6 @@ module Spree
 
           def build_table_header
 
-            Rails.logger.info "==========================="
-            Rails.logger.info "==========================="
-            Rails.logger.info "==========================="
-            Rails.logger.info data.inspect
-
             output << "\t<table class=\"tablesorter\">\n"
             unless data.column_names.empty? || !options.show_table_headers
               output << "\t\t<thead><tr>\n\t\t\t<th>" + 
