@@ -13,7 +13,9 @@
     <%#=t :products%> <%#= collection_select(:advanced_reporting, :product_id, @products, :id, :name, { :include_blank => 'All' } ) %><br />
     <!--&lt;!&ndash;</div>&ndash;&gt;-->
 
-    <%= t("date_range") %>:
+    <div class="align-center">
+        <%= t("date_range") %>:
+    </div>
     <div class="date-range-filter field align-center">
         <%= label_tag nil, t(:start), :class => 'inline' %>
         <%= s.text_field :created_at_gt, :class => 'datepicker datepicker-from' %>
@@ -26,7 +28,7 @@
         <%= label_tag nil, t(:end), :class => 'inline' %>
     </div>
 
-    <div class="actions filter-actions">
+    <div class="actions filter-actions align-center">
       <%= button t(:search), 'icon-search'  %>
     </div>
   <% end -%>
