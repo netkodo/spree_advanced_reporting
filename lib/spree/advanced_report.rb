@@ -18,19 +18,19 @@ module Spree
       self.unfiltered_params = params[:search].blank? ? {} : params[:search].clone
 
       params[:search] ||= {}
-      if params[:search][:created_at_gt].blank?
+      if params[:search][:completed_at_gt].blank?
         if (Order.count > 0) && Order.minimum(:created_at)
-          params[:search][:created_at_gt] = Order.maximum(:created_at).beginning_of_day # when starting just display orders from today
+          params[:search][:completed_at_gt] = Order.maximum(:completed_at).beginning_of_day # when starting just display orders from today
         end
       else
-        params[:search][:created_at_gt] = Time.zone.parse(params[:search][:created_at_gt]).beginning_of_day rescue ""
+        params[:search][:completed_at_gt] = Time.zone.parse(params[:search][:completed_at_gt]).beginning_of_day rescue ""
       end
-      if params[:search][:created_at_lt].blank?
-        if (Order.count > 0) && Order.maximum(:created_at)
-          params[:search][:created_at_lt] = Order.maximum(:created_at).end_of_day
+      if params[:search][:completed_at_lt].blank?
+        if (Order.count > 0) && Order.maximum(:completed_at)
+          params[:search][:completed_at_lt] = Order.maximum(:completed_at).end_of_day
         end
       else
-        params[:search][:created_at_lt] = Time.zone.parse(params[:search][:created_at_lt]).end_of_day rescue ""
+        params[:search][:completed_at_lt] = Time.zone.parse(params[:search][:completed_at_lt]).end_of_day rescue ""
       end
       #
       # params[:search][:completed_at_not_null] = true

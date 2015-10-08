@@ -41,7 +41,7 @@ class Spree::AdvancedReport::IncrementReport::Count < Spree::AdvancedReport::Inc
       self.cancelled += 1 if order.state == 'canceled'
     end
 
-    self.ratio = self.cancelled.to_f / self.total * 100
+    self.ratio = self.total > 0 ? self.cancelled.to_f / self.total * 100 : 0
 
     generate_ruport_data(['cancelled', 'ratio'])
 
